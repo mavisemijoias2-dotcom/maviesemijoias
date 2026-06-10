@@ -43,9 +43,6 @@ export default async function ProdutosPage() {
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
                     <p className="mb-3">Nenhum produto cadastrado</p>
-                    <Button asChild size="sm">
-                      <Link href="/admin/produtos/novo">Cadastrar primeiro produto</Link>
-                    </Button>
                   </td>
                 </tr>
               ) : (
