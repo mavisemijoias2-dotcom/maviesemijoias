@@ -1,17 +1,18 @@
 import { createClient } from '@/lib/supabase/server'
 import StockManager from '@/components/admin/stock-manager'
+import ProdutoModal from '@/components/admin/produto-modal'
 import Image from 'next/image'
-import Link from 'next/link'
-import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import type { Product } from '@/types'
+import type { Product, Category } from '@/types'
 
 export default async function EstoquePage() {
   let products: Product[] | null = null
+  let categories: Category[] = []
   try {
     const supabase = await createClient()
     const { data } = await supabase.from('products').select('*, category:categories(name)').order('name')
+    const { data: cats } = await supabase.from('categories').select('*').order('name')
     products = data as Product[]
+    categories = cats ?? []
   } catch { }
 
   const lowStock = (products ?? []).filter((p) => p.stock <= 3)
@@ -23,12 +24,7 @@ export default async function EstoquePage() {
         <h1 className="text-2xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Georgia, serif' }}>
           Estoque
         </h1>
-        <Button asChild>
-          <Link href="/admin/produtos/novo">
-            <Plus className="h-4 w-4 mr-2" />
-            Novo produto
-          </Link>
-        </Button>
+        <ProdutoModal categories={categories} />
       </div>
 
       {outOfStock.length > 0 && (

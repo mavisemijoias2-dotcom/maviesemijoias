@@ -14,9 +14,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 type Props = {
   categories: Category[]
   product?: Product
+  onSuccess?: () => void
 }
 
-export default function ProductForm({ categories, product }: Props) {
+export default function ProductForm({ categories, product, onSuccess }: Props) {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
@@ -90,8 +91,13 @@ export default function ProductForm({ categories, product }: Props) {
       return
     }
 
-    router.push('/admin/produtos')
-    router.refresh()
+    if (onSuccess) {
+      onSuccess()
+      router.refresh()
+    } else {
+      router.push('/admin/produtos')
+      router.refresh()
+    }
   }
 
   return (

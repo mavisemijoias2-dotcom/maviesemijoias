@@ -1,9 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import Link from 'next/link'
-import { Plus } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import ProductActions from '@/components/admin/product-actions'
+import ProdutoModal from '@/components/admin/produto-modal'
 import Image from 'next/image'
 import type { Product, Category } from '@/types'
 
@@ -24,12 +22,7 @@ export default async function ProdutosPage() {
         <h1 className="text-2xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Georgia, serif' }}>
           Produtos
         </h1>
-        <Button asChild>
-          <Link href="/admin/produtos/novo">
-            <Plus className="h-4 w-4 mr-2" />
-            Novo produto
-          </Link>
-        </Button>
+        <ProdutoModal categories={categories} />
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
