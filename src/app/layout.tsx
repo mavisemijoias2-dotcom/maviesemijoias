@@ -2,8 +2,12 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Mavié Joias',
-  description: 'Joias exclusivas com qualidade e elegância',
+  title: 'Mavié Semijoias',
+  description: 'Semijoias exclusivas com qualidade e elegância',
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
