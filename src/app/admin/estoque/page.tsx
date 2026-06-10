@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import StockManager from '@/components/admin/stock-manager'
 import Image from 'next/image'
+import Link from 'next/link'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { Product } from '@/types'
 
 export default async function EstoquePage() {
@@ -16,9 +19,17 @@ export default async function EstoquePage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-[#1a1a1a] mb-8" style={{ fontFamily: 'Georgia, serif' }}>
-        Estoque
-      </h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-2xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Georgia, serif' }}>
+          Estoque
+        </h1>
+        <Button asChild>
+          <Link href="/admin/produtos/novo">
+            <Plus className="h-4 w-4 mr-2" />
+            Novo produto
+          </Link>
+        </Button>
+      </div>
 
       {outOfStock.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">

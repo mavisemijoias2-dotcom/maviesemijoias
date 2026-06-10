@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { formatDate, formatPrice } from '@/lib/utils'
+import ClienteModal from '@/components/admin/cliente-modal'
 
 export default async function ClientesPage() {
   type ClientRow = { id: string; name: string; email: string; phone: string | null; address: string | null; created_at: string }
@@ -21,7 +22,10 @@ export default async function ClientesPage() {
         <h1 className="text-2xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Georgia, serif' }}>
           Clientes
         </h1>
-        <span className="text-sm text-gray-400">{clients?.length ?? 0} clientes cadastrados</span>
+        <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-400">{clients?.length ?? 0} clientes cadastrados</span>
+            <ClienteModal />
+          </div>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">

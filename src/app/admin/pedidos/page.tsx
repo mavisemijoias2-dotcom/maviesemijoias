@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { formatPrice, formatDateTime, ORDER_STATUS_LABELS, ORDER_STATUS_COLORS, PAYMENT_STATUS_LABELS, PAYMENT_STATUS_COLORS } from '@/lib/utils'
 import OrderStatusUpdater from '@/components/admin/order-status-updater'
+import PedidoModal from '@/components/admin/pedido-modal'
 import type { Order } from '@/types'
 
 export default async function PedidosPage() {
@@ -16,9 +17,12 @@ export default async function PedidosPage() {
 
   return (
     <div className="p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-[#1a1a1a] mb-8" style={{ fontFamily: 'Georgia, serif' }}>
-        Pedidos
-      </h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-2xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Georgia, serif' }}>
+          Pedidos
+        </h1>
+        <PedidoModal />
+      </div>
 
       <div className="space-y-4">
         {!orders || orders.length === 0 ? (
