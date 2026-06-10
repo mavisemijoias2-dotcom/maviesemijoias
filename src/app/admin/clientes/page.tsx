@@ -2,7 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { formatDate, formatPrice } from '@/lib/utils'
 
 export default async function ClientesPage() {
-  let clients: unknown[] | null = null
+  type ClientRow = { id: string; name: string; email: string; phone: string | null; address: string | null; created_at: string }
+  let clients: ClientRow[] | null = null
   const spentByClient: Record<string, number> = {}
   try {
     const supabase = await createClient()

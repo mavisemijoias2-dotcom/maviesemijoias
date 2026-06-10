@@ -1,9 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { formatPrice, formatDateTime, ORDER_STATUS_LABELS, ORDER_STATUS_COLORS, PAYMENT_STATUS_LABELS, PAYMENT_STATUS_COLORS } from '@/lib/utils'
 import OrderStatusUpdater from '@/components/admin/order-status-updater'
+import type { Order } from '@/types'
 
 export default async function PedidosPage() {
-  let orders: unknown[] | null = null
+  let orders: Order[] | null = null
   try {
     const supabase = await createClient()
     const { data } = await supabase
@@ -50,7 +51,7 @@ export default async function PedidosPage() {
                 <div className="border-t border-gray-100 pt-3 mb-4">
                   <p className="text-xs font-medium text-gray-500 mb-2">Itens do pedido:</p>
                   <div className="space-y-1">
-                    {order.items.map((item: { product: { name: string } | null; quantity: number; price: number }, i: number) => (
+                    {order.items!.map((item, i: number) => (
                       <div key={i} className="flex justify-between text-sm">
                         <span className="text-gray-600">{item.product?.name} x{item.quantity}</span>
                         <span className="text-gray-700">{formatPrice(item.price * item.quantity)}</span>

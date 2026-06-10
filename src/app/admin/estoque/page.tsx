@@ -1,17 +1,18 @@
 import { createClient } from '@/lib/supabase/server'
 import StockManager from '@/components/admin/stock-manager'
 import Image from 'next/image'
+import type { Product } from '@/types'
 
 export default async function EstoquePage() {
-  let products: unknown[] | null = null
+  let products: Product[] | null = null
   try {
     const supabase = await createClient()
     const { data } = await supabase.from('products').select('*, category:categories(name)').order('name')
-    products = data
+    products = data as Product[]
   } catch { }
 
-  const lowStock = (products ?? []).filter((p: unknown) => (p as {stock: number}).stock <= 3)
-  const outOfStock = (products ?? []).filter((p: unknown) => (p as {stock: number}).stock === 0)
+  const lowStock = (products ?? []).filter((p) => p.stock <= 3)
+  const outOfStock = (products ?? []).filter((p) => p.stock === 0)
 
   return (
     <div className="p-6 lg:p-8">

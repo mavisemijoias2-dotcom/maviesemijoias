@@ -5,10 +5,11 @@ import { formatPrice } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import ProductActions from '@/components/admin/product-actions'
 import Image from 'next/image'
+import type { Product, Category } from '@/types'
 
 export default async function ProdutosPage() {
-  let products: unknown[] = []
-  let categories: unknown[] = []
+  let products: Product[] = []
+  let categories: Category[] = []
   try {
     const supabase = await createClient()
     const { data: p } = await supabase.from('products').select('*, category:categories(name)').order('created_at', { ascending: false })
