@@ -28,7 +28,34 @@ export default async function ClientesPage() {
           </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {!clients || clients.length === 0 ? (
+          <div className="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-400">Nenhum cliente ainda</div>
+        ) : clients.map((client) => (
+          <div key={client.id} className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="font-medium text-[#1a1a1a]">{client.name}</p>
+                <p className="text-xs text-gray-400">{client.email}</p>
+                {client.address && <p className="text-xs text-gray-400 mt-0.5">{client.address}</p>}
+              </div>
+              <p className="font-bold text-[#C4966A] text-sm">{formatPrice(spentByClient[client.id] ?? 0)}</p>
+            </div>
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+              {client.phone ? (
+                <a href={`https://wa.me/55${client.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-600 text-sm hover:underline">
+                  {client.phone}
+                </a>
+              ) : <span className="text-gray-400 text-sm">Sem telefone</span>}
+              <span className="text-xs text-gray-400">{formatDate(client.created_at)}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
@@ -41,33 +68,25 @@ export default async function ClientesPage() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {!clients || clients.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-gray-400">
-                    Nenhum cliente ainda
+                <tr><td colSpan={4} className="px-6 py-12 text-center text-gray-400">Nenhum cliente ainda</td></tr>
+              ) : clients.map((client) => (
+                <tr key={client.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">
+                    <p className="font-medium text-[#1a1a1a]">{client.name}</p>
+                    <p className="text-xs text-gray-400">{client.email}</p>
+                    {client.address && <p className="text-xs text-gray-400">{client.address}</p>}
                   </td>
+                  <td className="px-6 py-4 text-gray-600">
+                    {client.phone ? (
+                      <a href={`https://wa.me/55${client.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">
+                        {client.phone}
+                      </a>
+                    ) : '—'}
+                  </td>
+                  <td className="px-6 py-4 font-semibold text-[#C4966A]">{formatPrice(spentByClient[client.id] ?? 0)}</td>
+                  <td className="px-6 py-4 text-gray-400 text-xs">{formatDate(client.created_at)}</td>
                 </tr>
-              ) : (
-                clients.map((client) => (
-                  <tr key={client.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
-                      <p className="font-medium text-[#1a1a1a]">{client.name}</p>
-                      <p className="text-xs text-gray-400">{client.email}</p>
-                      {client.address && <p className="text-xs text-gray-400">{client.address}</p>}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">
-                      {client.phone ? (
-                        <a href={`https://wa.me/55${client.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">
-                          {client.phone}
-                        </a>
-                      ) : '—'}
-                    </td>
-                    <td className="px-6 py-4 font-semibold text-[#C4966A]">
-                      {formatPrice(spentByClient[client.id] ?? 0)}
-                    </td>
-                    <td className="px-6 py-4 text-gray-400 text-xs">{formatDate(client.created_at)}</td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>

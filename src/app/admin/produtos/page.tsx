@@ -25,7 +25,37 @@ export default async function ProdutosPage() {
         <ProdutoModal categories={categories} />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {!products || products.length === 0 ? (
+          <div className="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-400">Nenhum produto cadastrado</div>
+        ) : products.map((product) => (
+          <div key={product.id} className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className="flex gap-3 items-start">
+              <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                {product.images?.[0] ? (
+                  <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+                ) : <div className="w-full h-full bg-gray-100" />}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-[#1a1a1a] truncate">{product.name}</p>
+                <p className="text-xs text-gray-400">{product.category?.name ?? '—'}</p>
+                <div className="flex items-center gap-2 mt-1.5">
+                  <span className="font-semibold text-[#C4966A]">{formatPrice(product.price)}</span>
+                  <span className="text-xs text-gray-400">· estoque: <span className={product.stock === 0 ? 'text-red-500 font-medium' : ''}>{product.stock}</span></span>
+                  <span className={`inline-flex px-1.5 py-0.5 rounded-full text-xs font-medium ${product.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                    {product.active ? 'Ativo' : 'Inativo'}
+                  </span>
+                </div>
+              </div>
+              <ProductActions product={product} categories={categories ?? []} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
@@ -40,44 +70,34 @@ export default async function ProdutosPage() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {!products || products.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
-                    <p className="mb-3">Nenhum produto cadastrado</p>
+                <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">Nenhum produto cadastrado</td></tr>
+              ) : products.map((product) => (
+                <tr key={product.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                        {product.images?.[0] ? (
+                          <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+                        ) : <div className="w-full h-full bg-gray-100" />}
+                      </div>
+                      <span className="font-medium text-[#1a1a1a]">{product.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-gray-500">{product.category?.name ?? '—'}</td>
+                  <td className="px-6 py-4 font-semibold text-[#C4966A]">{formatPrice(product.price)}</td>
+                  <td className="px-6 py-4">
+                    <span className={`font-medium ${product.stock === 0 ? 'text-red-500' : 'text-gray-700'}`}>{product.stock}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${product.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                      {product.active ? 'Ativo' : 'Inativo'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <ProductActions product={product} categories={categories ?? []} />
                   </td>
                 </tr>
-              ) : (
-                products.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                          {product.images?.[0] ? (
-                            <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
-                          ) : (
-                            <div className="w-full h-full bg-gray-100" />
-                          )}
-                        </div>
-                        <span className="font-medium text-[#1a1a1a]">{product.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-500">{product.category?.name ?? '—'}</td>
-                    <td className="px-6 py-4 font-semibold text-[#C4966A]">{formatPrice(product.price)}</td>
-                    <td className="px-6 py-4">
-                      <span className={`font-medium ${product.stock === 0 ? 'text-red-500' : 'text-gray-700'}`}>
-                        {product.stock}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${product.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
-                        {product.active ? 'Ativo' : 'Inativo'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <ProductActions product={product} categories={categories ?? []} />
-                    </td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>

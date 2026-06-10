@@ -55,7 +55,34 @@ export default async function DashboardPage() {
         <div className="px-6 py-4 border-b border-gray-100">
           <h2 className="font-semibold text-[#1a1a1a]">Pedidos Recentes</h2>
         </div>
-        <div className="overflow-x-auto">
+
+        {/* Mobile cards */}
+        <div className="md:hidden divide-y divide-gray-100">
+          {recentOrders.length === 0 ? (
+            <p className="px-6 py-8 text-center text-gray-400">Nenhum pedido ainda</p>
+          ) : recentOrders.map((order) => (
+            <div key={order.id} className="px-4 py-4">
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <p className="font-medium text-[#1a1a1a] text-sm">{order.client_name || '—'}</p>
+                  <p className="text-xs text-gray-400">{formatDateTime(order.created_at)}</p>
+                </div>
+                <p className="font-bold text-[#C4966A]">{formatPrice(order.total)}</p>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${PAYMENT_STATUS_COLORS[order.payment_status]}`}>
+                  {PAYMENT_STATUS_LABELS[order.payment_status]}
+                </span>
+                <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${ORDER_STATUS_COLORS[order.status]}`}>
+                  {ORDER_STATUS_LABELS[order.status]}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr>
@@ -68,31 +95,27 @@ export default async function DashboardPage() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {recentOrders.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-400">Nenhum pedido ainda</td>
+                <tr><td colSpan={5} className="px-6 py-8 text-center text-gray-400">Nenhum pedido ainda</td></tr>
+              ) : recentOrders.map((order) => (
+                <tr key={order.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">
+                    <p className="font-medium text-[#1a1a1a]">{order.client_name || '—'}</p>
+                    <p className="text-xs text-gray-400">{order.client_email}</p>
+                  </td>
+                  <td className="px-6 py-4 font-semibold text-[#C4966A]">{formatPrice(order.total)}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${PAYMENT_STATUS_COLORS[order.payment_status]}`}>
+                      {PAYMENT_STATUS_LABELS[order.payment_status]}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${ORDER_STATUS_COLORS[order.status]}`}>
+                      {ORDER_STATUS_LABELS[order.status]}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-gray-500 text-xs">{formatDateTime(order.created_at)}</td>
                 </tr>
-              ) : (
-                recentOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
-                      <p className="font-medium text-[#1a1a1a]">{order.client_name || '—'}</p>
-                      <p className="text-xs text-gray-400">{order.client_email}</p>
-                    </td>
-                    <td className="px-6 py-4 font-semibold text-[#C4966A]">{formatPrice(order.total)}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${PAYMENT_STATUS_COLORS[order.payment_status]}`}>
-                        {PAYMENT_STATUS_LABELS[order.payment_status]}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${ORDER_STATUS_COLORS[order.status]}`}>
-                        {ORDER_STATUS_LABELS[order.status]}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-gray-500 text-xs">{formatDateTime(order.created_at)}</td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>

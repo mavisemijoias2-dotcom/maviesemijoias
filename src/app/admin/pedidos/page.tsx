@@ -24,7 +24,7 @@ export default async function PedidosPage() {
         <PedidoModal />
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {!orders || orders.length === 0 ? (
           <div className="bg-white rounded-xl border border-gray-200 p-12 text-center text-gray-400">
             Nenhum pedido ainda
